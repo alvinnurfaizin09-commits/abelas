@@ -1,0 +1,16 @@
+{
+  "name": "abelas - Absensi Kelas Berbasis QR",
+  "short_name": "abelas",
+  "description": "Aplikasi Absensi Kelas Berbasis QR Code Modern & Cepat",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5F5F5",
+  "theme_color": "#A8B928",
+  "icons": [
+    {
+      "src": "/logo-square.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
