@@ -28,8 +28,8 @@ export default function LoginPage() {
   const { currentUser, role, isLoading: authLoading, loginWithUser, isFirebaseActive } = useAuth();
 
   const [activeRoleTab, setActiveRoleTab] = useState<"student" | "admin">("student");
-  const [identifier, setIdentifier] = useState<string>("alvin.nur.faizin@siswa.sch.id");
-  const [password, setPassword] = useState<string>("siswa123");
+  const [identifier, setIdentifier] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [successBanner, setSuccessBanner] = useState<string | null>(null);
@@ -59,13 +59,8 @@ export default function LoginPage() {
   const switchTab = (tab: "student" | "admin") => {
     setActiveRoleTab(tab);
     setError(null);
-    if (tab === "student") {
-      setIdentifier("alvin.nur.faizin@siswa.sch.id");
-      setPassword("siswa123");
-    } else {
-      setIdentifier("admin@sekolah.sch.id");
-      setPassword("admin123");
-    }
+    setIdentifier("");
+    setPassword("");
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -190,13 +185,6 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const quickFill = (role: "student" | "admin", id: string, pass: string) => {
-    setActiveRoleTab(role);
-    setIdentifier(id);
-    setPassword(pass);
-    setError(null);
   };
 
   return (
@@ -337,35 +325,8 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Quick Demo Access Options */}
-        <div className="pt-2 space-y-2 border-t border-[#E7E8E8]">
-          <span className="text-[11px] font-semibold text-[#7B868F] block text-center">
-            Pilihan Akun Demo Cepat:
-          </span>
-
-          <div className="grid grid-cols-2 gap-2 text-left">
-            <button
-              type="button"
-              onClick={() => quickFill("student", "alvin.nur.faizin@siswa.sch.id", "siswa123")}
-              className="p-2.5 rounded-xl border border-[#E7E8E8] bg-[#FAFAFA] hover:border-[#191E24] transition-colors"
-            >
-              <p className="text-[11px] font-bold text-[#191E24]">Alvin (Siswa)</p>
-              <p className="text-[10px] text-[#7B868F]">NIS: 20261001</p>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => quickFill("admin", "admin@sekolah.sch.id", "admin123")}
-              className="p-2.5 rounded-xl border border-[#E7E8E8] bg-[#FAFAFA] hover:border-[#191E24] transition-colors"
-            >
-              <p className="text-[11px] font-bold text-[#191E24]">Alvin (Guru/Admin)</p>
-              <p className="text-[10px] text-[#7B868F]">NIP: 19880906</p>
-            </button>
-          </div>
-        </div>
-
         {/* Security badge */}
-        <div className="pt-1 flex items-center justify-center gap-1.5 text-[11px] text-[#7B868F]">
+        <div className="pt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#7B868F]">
           <Shield className="h-3.5 w-3.5 text-[#C2B535]" />
           <span>
             {isFirebaseConfigured()

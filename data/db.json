@@ -1,105 +1,23 @@
 {
   "classes": [
     {
-      "id": "cls-17d96bcc",
-      "name": "XII Rekayasa Perangkat Lunak 3 (Kelas Khusus)",
-      "description": "Laboratorium Software & AI - Proyek Alvin",
-      "createdAt": "2026-09-06T03:47:36.390Z"
+      "id": "cls-xia",
+      "name": "XI-A",
+      "academic_year": "2026/2027",
+      "description": "Kelas Unggulan IPA 1"
     },
     {
-      "id": "cls-rpl-1",
-      "name": "XII Rekayasa Perangkat Lunak 1",
-      "description": "Laboratorium Komputer 1 (Software Engineering)",
-      "createdAt": "2026-09-06T03:47:25.968Z"
+      "id": "cls-xib",
+      "name": "XI-B",
+      "academic_year": "2026/2027",
+      "description": "Kelas Unggulan IPA 2"
     },
     {
-      "id": "cls-tkj-1",
-      "name": "XII Teknik Komputer & Jaringan",
-      "description": "Lab Jaringan Cisco & Mikrotik",
-      "createdAt": "2026-09-06T03:47:25.969Z"
-    },
-    {
-      "id": "cls-dkv-1",
-      "name": "XI Desain Komunikasi Visual",
-      "description": "Studio Desain Kreatif & Multimedia",
-      "createdAt": "2026-09-06T03:47:25.969Z"
-    },
-    {
-      "id": "cls-pplg-1",
-      "name": "X Pengembangan Perangkat Lunak & Gim",
-      "description": "Kelas Dasar Pemrograman & Logika",
-      "createdAt": "2026-09-06T03:47:25.969Z"
+      "id": "cls-xid",
+      "name": "XI-D",
+      "academic_year": "2026/2027",
+      "description": "Kelas Reguler IPA"
     }
   ],
-  "tokens": {
-    "qr_fcd595f8dc40464392b55ac9b480d66e": {
-      "token": "qr_fcd595f8dc40464392b55ac9b480d66e",
-      "classId": "cls-17d96bcc",
-      "className": "XII Rekayasa Perangkat Lunak 3 (Kelas Khusus)",
-      "createdAt": "2026-09-06T03:47:36.418Z",
-      "expiresAt": "2026-09-06T04:17:36.418Z",
-      "isUsed": true,
-      "usedBy": {
-        "studentName": "Alvin Pratama",
-        "studentId": "20261001",
-        "timestamp": "2026-09-06T03:47:36.434Z",
-        "time": "10:47:36"
-      }
-    },
-    "qr_9d284512961a44d0967f765f61318662": {
-      "token": "qr_9d284512961a44d0967f765f61318662",
-      "classId": "cls-17d96bcc",
-      "className": "XII Rekayasa Perangkat Lunak 3 (Kelas Khusus)",
-      "createdAt": "2026-09-06T03:48:55.389Z",
-      "expiresAt": "2026-09-06T04:18:55.389Z",
-      "isUsed": false
-    },
-    "qr_c157b54ed8474c1dab3071a094957b6e": {
-      "token": "qr_c157b54ed8474c1dab3071a094957b6e",
-      "classId": "cls-17d96bcc",
-      "className": "XII Rekayasa Perangkat Lunak 3 (Kelas Khusus)",
-      "createdAt": "2026-09-06T03:49:10.401Z",
-      "expiresAt": "2026-09-06T04:19:10.401Z",
-      "isUsed": false
-    },
-    "qr_5e301609b3334b528ac4d10ee4c9e868": {
-      "token": "qr_5e301609b3334b528ac4d10ee4c9e868",
-      "classId": "cls-17d96bcc",
-      "className": "XII Rekayasa Perangkat Lunak 3 (Kelas Khusus)",
-      "createdAt": "2026-09-06T03:49:43.436Z",
-      "expiresAt": "2026-09-06T04:19:43.436Z",
-      "isUsed": false
-    }
-  },
-  "attendance": [
-    {
-      "id": "att-3cb75909",
-      "studentName": "Alvin Pratama",
-      "studentId": "20261001",
-      "classId": "cls-17d96bcc",
-      "className": "XII Rekayasa Perangkat Lunak 3 (Kelas Khusus)",
-      "date": "2026-09-06",
-      "time": "10:47:36",
-      "timestamp": "2026-09-06T03:47:36.434Z",
-      "isExtraDay": true,
-      "dayName": "Minggu",
-      "status": "terlambat",
-      "tokenUsed": "qr_fcd595f8dc40464392b55ac9b480d66e"
-    }
-  ],
-  "settings": {
-    "schoolName": "SMK / SMA Negeri - Sistem Presensi Digital Modern",
-    "allowExtraDays": true,
-    "extraDays": [
-      "Sabtu",
-      "Minggu"
-    ],
-    "specificExtraDates": [
-      "2026-09-06",
-      "2026-09-12"
-    ],
-    "startTime": "07:00",
-    "lateThresholdTime": "07:30",
-    "autoRefreshQrSeconds": 0
-  }
+  "tokens": {}
 }

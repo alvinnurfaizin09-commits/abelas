@@ -48,14 +48,14 @@ export default function AdminDashboardPage() {
   });
 
   const [stats, setStats] = useState({
-    totalStudents: 36,
-    hadirToday: 32,
-    belumHadir: 4,
-    attendanceRate: 89,
+    totalStudents: 0,
+    hadirToday: 0,
+    belumHadir: 0,
+    attendanceRate: 0,
   });
 
   const [students, setStudents] = useState<StudentItem[]>([]);
-  const [activeSessionId, setActiveSessionId] = useState<string>("ATT-20260906-001");
+  const [activeSessionId, setActiveSessionId] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 

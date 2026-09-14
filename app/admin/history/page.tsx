@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Calendar, ChevronRight, X } from "lucide-react";
 import { useRequireAuth } from "@/lib/authContext";
@@ -19,65 +19,57 @@ interface SessionSummary {
 
 export default function AdminHistoryPage() {
   const { currentUser, isLoading: authLoading } = useRequireAuth("admin");
-  const [historyList] = useState<SessionSummary[]>([
-    {
-      id: "ATT-20260906-001",
-      subject: "Matematika",
-      date: "2026-09-06",
-      formattedDate: "06 Sep",
-      startTime: "07:00",
-      endTime: "07:05",
-      presentCount: 32,
-      totalCount: 36,
-      rate: 89,
-    },
-    {
-      id: "ATT-20260905-001",
-      subject: "Bahasa Indonesia",
-      date: "2026-09-05",
-      formattedDate: "05 Sep",
-      startTime: "08:00",
-      endTime: "08:15",
-      presentCount: 34,
-      totalCount: 36,
-      rate: 94,
-    },
-    {
-      id: "ATT-20260904-001",
-      subject: "Fisika",
-      date: "2026-09-04",
-      formattedDate: "04 Sep",
-      startTime: "07:00",
-      endTime: "07:10",
-      presentCount: 30,
-      totalCount: 36,
-      rate: 83,
-    },
-    {
-      id: "ATT-20260903-001",
-      subject: "Kimia",
-      date: "2026-09-03",
-      formattedDate: "03 Sep",
-      startTime: "09:00",
-      endTime: "09:10",
-      presentCount: 33,
-      totalCount: 36,
-      rate: 92,
-    },
-    {
-      id: "ATT-20260902-001",
-      subject: "Biologi",
-      date: "2026-09-02",
-      formattedDate: "02 Sep",
-      startTime: "07:30",
-      endTime: "07:40",
-      presentCount: 35,
-      totalCount: 36,
-      rate: 97,
-    },
-  ]);
-
+  const [historyList, setHistoryList] = useState<SessionSummary[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedSession, setSelectedSession] = useState<SessionSummary | null>(null);
+
+  useEffect(() => {
+    async function loadHistory() {
+      try {
+        setLoading(true);
+        const [sessRes, recRes] = await Promise.all([
+          fetch("/api/sessions"),
+          fetch("/api/attendance?limit=1000"),
+        ]);
+        const sessData = await sessRes.json();
+        const recData = await recRes.json();
+
+        if (sessData.success && Array.isArray(sessData.sessions)) {
+          const allRecords = recData.success && Array.isArray(recData.records) ? recData.records : [];
+          
+          const summaries: SessionSummary[] = sessData.sessions.map((sess: any) => {
+            const sessRecords = allRecords.filter((r: any) => r.session_id === sess.id || r.sessionId === sess.id);
+            const present = sessRecords.filter((r: any) => r.status === "hadir" || r.status === "terlambat").length;
+            const total = sessRecords.length || present || 1;
+            const rate = total > 0 ? Math.round((present / total) * 100) : 100;
+
+            const d = sess.date ? new Date(sess.date) : new Date(sess.created_at);
+            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            const formattedDate = `${String(d.getDate()).padStart(2, "0")} ${months[d.getMonth()]}`;
+
+            return {
+              id: sess.id,
+              subject: sess.subject,
+              date: sess.date || sess.created_at?.split("T")[0] || "-",
+              formattedDate,
+              startTime: sess.start_time || "07:00",
+              endTime: sess.end_time || "07:15",
+              presentCount: present,
+              totalCount: total,
+              rate,
+            };
+          });
+
+          setHistoryList(summaries);
+        }
+      } catch (e) {
+        console.warn("Failed to load history sessions", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadHistory();
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -104,53 +96,67 @@ export default function AdminHistoryPage() {
         <div className="flex items-center justify-between px-1">
           <span className="text-xs font-semibold text-[#7B868F] uppercase tracking-wider flex items-center gap-1.5">
             <Calendar className="h-4 w-4 text-[#7B868F]" />
-            September 2026
+            Daftar Sesi Presensi
           </span>
           <span className="text-xs font-medium text-[#7B868F]">
             {historyList.length} Sesi Terlaksana
           </span>
         </div>
 
-        <div className="space-y-2.5">
-          {historyList.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setSelectedSession(item)}
-              className="saas-card p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer hover:border-[#191E24] hover:shadow-xs transition-all"
-            >
-              <div className="flex items-center gap-3.5">
-                <div className="h-12 w-12 rounded-2xl bg-[#F5F5F5] border border-[#E7E8E8] flex flex-col items-center justify-center font-bold text-xs text-[#191E24] flex-shrink-0">
-                  <span className="text-xs leading-none">{item.formattedDate.split(" ")[0]}</span>
-                  <span className="text-[10px] text-[#7B868F] uppercase leading-none mt-0.5">
-                    {item.formattedDate.split(" ")[1]}
-                  </span>
+        {loading ? (
+          <div className="saas-card p-10 text-center text-xs text-[#7B868F]">
+            Memuat riwayat sesi...
+          </div>
+        ) : historyList.length === 0 ? (
+          <div className="saas-card p-10 text-center space-y-2 border border-[#E7E8E8]">
+            <Calendar className="h-8 w-8 text-[#7B868F]/50 mx-auto" />
+            <p className="text-sm font-semibold text-[#191E24]">Belum Ada Sesi Presensi</p>
+            <p className="text-xs text-[#7B868F]">
+              Riwayat akan tercatat secara otomatis setiap kali guru atau admin membuka sesi presensi QR.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-2.5">
+            {historyList.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => setSelectedSession(item)}
+                className="saas-card p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer hover:border-[#191E24] hover:shadow-xs transition-all"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="h-12 w-12 rounded-2xl bg-[#F5F5F5] border border-[#E7E8E8] flex flex-col items-center justify-center font-bold text-xs text-[#191E24] flex-shrink-0">
+                    <span className="text-xs leading-none">{item.formattedDate.split(" ")[0]}</span>
+                    <span className="text-[10px] text-[#7B868F] uppercase leading-none mt-0.5">
+                      {item.formattedDate.split(" ")[1] || ""}
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-[#191E24]">
+                      {item.subject}
+                    </h4>
+                    <p className="text-xs text-[#7B868F] flex items-center gap-2 mt-0.5">
+                      <span>{item.presentCount} hadir</span>
+                      <span>•</span>
+                      <span className="font-mono">{item.startTime} – {item.endTime}</span>
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-sm font-bold text-[#191E24]">
-                    {item.subject}
-                  </h4>
-                  <p className="text-xs text-[#7B868F] flex items-center gap-2 mt-0.5">
-                    <span>{item.presentCount} hadir</span>
-                    <span>•</span>
-                    <span className="font-mono">{item.startTime} – {item.endTime}</span>
-                  </p>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-3">
-                <div className="text-right">
-                  <span className="text-sm font-bold text-[#191E24] block">
-                    {item.rate}%
-                  </span>
-                  <span className="text-[11px] font-medium text-[#3B5A42] block">
-                    Kehadiran
-                  </span>
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <span className="text-sm font-bold text-[#191E24] block">
+                      {item.rate}%
+                    </span>
+                    <span className="text-[11px] font-medium text-[#3B5A42] block">
+                      Kehadiran
+                    </span>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-[#7B868F]" />
                 </div>
-                <ChevronRight className="h-5 w-5 text-[#7B868F]" />
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Detail Modal */}
